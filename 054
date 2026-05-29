@@ -1,21 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_NOME 50
-
-typedef struct {
+// Definição da struct Personagem
+struct Personagem {
     int id;
-    char nome[MAX_NOME];
+    char nome[50];
     int forca;
     int agilidade;
     int inteligencia;
-} Personagem;
+};
 
-// Funcao de busca linear para encontrar personagem por ID
-// Retorna o indice se encontrado, ou -1 se nao encontrado
-int buscar_personagem(Personagem personagens[], int total, int id_busca) {
+// Função de busca linear que retorna o índice do personagem encontrado ou -1 se não existir
+int buscarPersonagem(struct Personagem personagens[], int total, int idBusca) {
     for (int i = 0; i < total; i++) {
-        if (personagens[i].id == id_busca) {
+        if (personagens[i].id == idBusca) {
             return i;
         }
     }
@@ -23,63 +21,74 @@ int buscar_personagem(Personagem personagens[], int total, int id_busca) {
 }
 
 int main() {
-    int n, i;
-    int opcao;
-    int id_busca;
-    int indice_encontrado;
+    int totalPersonagens;
     
-    // Ler o numero total de personagens
-    scanf("%d", &n);
+    // Leitura do número total de personagens
+    printf("Digite o numero total de personagens na campanha: ");
+    scanf("%d", &totalPersonagens);
     
-    // Criar vetor de personagens
-    Personagem personagens[n];
+    // Criação do vetor de structs
+    struct Personagem personagens[totalPersonagens];
     
-    // Ler os dados de cada personagem
-    for (i = 0; i < n; i++) {
-        scanf("%d %s %d %d %d", 
-              &personagens[i].id, 
-              personagens[i].nome, 
-              &personagens[i].forca, 
-              &personagens[i].agilidade, 
-              &personagens[i].inteligencia);
+    // Leitura dos dados de cada personagem
+    for (int i = 0; i < totalPersonagens; i++) {
+        printf("\n--- Personagem %d ---\n", i + 1);
+        
+        printf("Digite a ID do personagem: ");
+        scanf("%d", &personagens[i].id);
+        
+        printf("Digite o nome do personagem (uma unica palavra): ");
+        scanf("%s", personagens[i].nome);
+        
+        printf("Digite a Forca: ");
+        scanf("%d", &personagens[i].forca);
+        
+        printf("Digite a Agilidade: ");
+        scanf("%d", &personagens[i].agilidade);
+        
+        printf("Digite a Inteligencia: ");
+        scanf("%d", &personagens[i].inteligencia);
     }
     
-    // Loop do menu principal
+    // Menu interativo
+    int opcao;
+    int idConsulta;
+    
     do {
-        // Exibir menu
+        printf("\n=== MENU ===\n");
+        printf("1 - Consultar Personagem\n");
+        printf("2 - Sair\n");
+        printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
         
         switch (opcao) {
             case 1:
-                // Ler a ID para consulta
-                scanf("%d", &id_busca);
+                printf("\nDigite a ID do personagem que deseja consultar: ");
+                scanf("%d", &idConsulta);
                 
-                // Buscar o personagem
-                indice_encontrado = buscar_personagem(personagens, n, id_busca);
+                int indice = buscarPersonagem(personagens, totalPersonagens, idConsulta);
                 
-                if (indice_encontrado != -1) {
-                    // Calcular a media dos atributos
-                    int soma = personagens[indice_encontrado].forca + 
-                               personagens[indice_encontrado].agilidade + 
-                               personagens[indice_encontrado].inteligencia;
-                    float media = soma / 3.0;
+                if (indice != -1) {
+                    float media = (personagens[indice].forca + 
+                                   personagens[indice].agilidade + 
+                                   personagens[indice].inteligencia) / 3.0;
                     
-                    // Exibir o resultado
-                    printf("%s: %.2f\n", personagens[indice_encontrado].nome, media);
+                    printf("\n=== RESULTADO DA CONSULTA ===\n");
+                    printf("Nome do personagem: %s\n", personagens[indice].nome);
+                    printf("Media de atributos: %.2f\n", media);
                 } else {
-                    // Personagem nao encontrado
-                    printf("Personagem nao encontrado\n");
+                    printf("\nPersonagem com ID %d nao encontrado!\n", idConsulta);
                 }
                 break;
                 
             case 2:
-                // Sair do programa
+                printf("\nEncerrando o programa. Boa sessao, Mestre!\n");
                 break;
                 
             default:
-                // Opcao invalida (nao deve ocorrer conforme especificacao)
-                break;
+                printf("\nOpcao invalida! Tente novamente.\n");
         }
+        
     } while (opcao != 2);
     
     return 0;
