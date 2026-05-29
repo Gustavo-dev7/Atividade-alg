@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_NOME 50
+
+typedef struct {
+    int id;
+    char nome[MAX_NOME];
+    int forca;
+    int agilidade;
+    int inteligencia;
+} Personagem;
+
+// Funcao de busca linear para encontrar personagem por ID
+// Retorna o indice se encontrado, ou -1 se nao encontrado
+int buscar_personagem(Personagem personagens[], int total, int id_busca) {
+    for (int i = 0; i < total; i++) {
+        if (personagens[i].id == id_busca) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int n, i;
+    int opcao;
+    int id_busca;
+    int indice_encontrado;
+    
+    // Ler o numero total de personagens
+    scanf("%d", &n);
+    
+    // Criar vetor de personagens
+    Personagem personagens[n];
+    
+    // Ler os dados de cada personagem
+    for (i = 0; i < n; i++) {
+        scanf("%d %s %d %d %d", 
+              &personagens[i].id, 
+              personagens[i].nome, 
+              &personagens[i].forca, 
+              &personagens[i].agilidade, 
+              &personagens[i].inteligencia);
+    }
+    
+    // Loop do menu principal
+    do {
+        // Exibir menu
+        scanf("%d", &opcao);
+        
+        switch (opcao) {
+            case 1:
+                // Ler a ID para consulta
+                scanf("%d", &id_busca);
+                
+                // Buscar o personagem
+                indice_encontrado = buscar_personagem(personagens, n, id_busca);
+                
+                if (indice_encontrado != -1) {
+                    // Calcular a media dos atributos
+                    int soma = personagens[indice_encontrado].forca + 
+                               personagens[indice_encontrado].agilidade + 
+                               personagens[indice_encontrado].inteligencia;
+                    float media = soma / 3.0;
+                    
+                    // Exibir o resultado
+                    printf("%s: %.2f\n", personagens[indice_encontrado].nome, media);
+                } else {
+                    // Personagem nao encontrado
+                    printf("Personagem nao encontrado\n");
+                }
+                break;
+                
+            case 2:
+                // Sair do programa
+                break;
+                
+            default:
+                // Opcao invalida (nao deve ocorrer conforme especificacao)
+                break;
+        }
+    } while (opcao != 2);
+    
+    return 0;
+}
